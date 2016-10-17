@@ -25,7 +25,7 @@
         <module name="PersonalMovieDatabase" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="PersonalMovieDatabase" target="1.8" />
     </bytecodeTargetLevel>
   </component>

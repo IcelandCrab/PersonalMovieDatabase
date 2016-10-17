@@ -11,7 +11,7 @@ import java.util.List;
  *
  * Response root eines http://www.omdbapi.com/ querys nach Titel
  */
-@XStreamAlias("result")
+@XStreamAlias("root")
 public class Root {
 
     @XStreamAsAttribute
