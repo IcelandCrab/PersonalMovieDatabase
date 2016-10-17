@@ -1,0 +1,6 @@
+http://www.omdbapi.com/?s=preda*&y=&r=xml
+query, der mehr als ein ergebnis zurückliefert -> daraus kann ich mir die imdbid zupfen, wenn ein records ausgewählt wurde und kann damit dann
+weitere infos über einen zweiten query beziehen
+
+http://www.omdbapi.com/?i=tt0113492&plot=short&r=xml
+query, mit dem ich die detaildaten ziehen kann
