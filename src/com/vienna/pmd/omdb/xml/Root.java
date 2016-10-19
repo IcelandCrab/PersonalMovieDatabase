@@ -1,9 +1,11 @@
 package com.vienna.pmd.omdb.xml;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +24,11 @@ public class Root {
     @XStreamAlias("totalResults")
     private Integer totalResults;
 
-    @XStreamImplicit
-    private List<Result> results;
+    @XStreamImplicit(itemFieldName = "result")
+    private List<Result> results = new ArrayList<Result>();
+
+    @XStreamImplicit(itemFieldName = "movie")
+    private List<Movie> movies = new ArrayList<Movie>();
 
     public Boolean getResponse() {
         return response;
@@ -35,9 +40,5 @@ public class Root {
 
     public List<Result> getResults() {
         return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 }

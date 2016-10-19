@@ -34,7 +34,8 @@ public class Main extends Application {
             URIBuilder uriBuilder = new URIBuilder().setScheme("http")
                     .setHost("www.omdbapi.com")
                     .setPath("/")
-                    .setParameter("s", "Predator")
+                    .setParameter("i", "tt0093773")
+                    //.setParameter("s", "Predator")
                     .setParameter("r", "xml");
 
             HttpGet get = new HttpGet(uriBuilder.build());

@@ -1,8 +1,9 @@
 package com.vienna.pmd.omdb.xml;
 
-import com.sun.org.apache.xpath.internal.operations.String;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.vienna.pmd.omdb.PlotType;
 
 /**
  * Created by bobmo on 12.10.2016.
@@ -24,7 +25,8 @@ public class Result {
 
     @XStreamAsAttribute
     @XStreamAlias("type")
-    private String type;
+    @XStreamConverter(TypeConverter.class)
+    private Type type;
 
     @XStreamAsAttribute
     @XStreamAlias("poster")
@@ -85,4 +87,80 @@ public class Result {
     @XStreamAsAttribute
     @XStreamAlias("imdbVotes")
     private String imdbVotes;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getImdbID() {
+        return imdbID;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public String getRated() {
+        return rated;
+    }
+
+    public String getReleased() {
+        return released;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public String getActors() {
+        return actors;
+    }
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getAwards() {
+        return awards;
+    }
+
+    public String getMetascore() {
+        return metascore;
+    }
+
+    public String getImdbRating() {
+        return imdbRating;
+    }
+
+    public String getImdbVotes() {
+        return imdbVotes;
+    }
 }
