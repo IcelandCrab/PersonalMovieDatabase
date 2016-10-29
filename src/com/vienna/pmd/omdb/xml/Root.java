@@ -41,4 +41,8 @@ public class Root {
     public List<Result> getResults() {
         return results;
     }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
 }
