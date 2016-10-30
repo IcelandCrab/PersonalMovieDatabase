@@ -5,15 +5,19 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="800.0" minWidth="1200.0" prefHeight="657.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vienna.pmd.ui.SearchController">
+<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vienna.pmd.ui.SearchController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -22,24 +26,6 @@
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <SplitPane dividerPositions="0.2337228714524207" maxHeight="1.7976931348623157E308" prefHeight="493.0" prefWidth="901.0" GridPane.rowIndex="1">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Button id="searchButton" fx:id="searchButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#fireSearch" text="Suchen" textAlignment="CENTER" />
-                  <TextField id="searchText" fx:id="searchText" layoutX="14.0" layoutY="21.0" promptText="Suchbegriff..." />
-               </children></AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <TableView id="searchResultTable" fx:id="searchResultTable" prefHeight="763.0" prefWidth="913.0">
-                    <columns>
-                      <TableColumn id="coverColumn" fx:id="coverColumn" prefWidth="75.0" text="Cover" />
-                      <TableColumn id="titleColumn" fx:id="titleColumn" prefWidth="75.0" text="Titel" />
-                    </columns>
-                  </TableView>
-               </children></AnchorPane>
-        </items>
-      </SplitPane>
       <MenuBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="37.0" GridPane.valignment="TOP">
         <menus>
           <Menu mnemonicParsing="false" text="File">
@@ -59,5 +45,63 @@
           </Menu>
         </menus>
       </MenuBar>
+      <TabPane prefHeight="170.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+        <tabs>
+          <Tab id="libraryTab" fx:id="libraryTab" closable="false" text="Bibliothek">
+            <content>
+              <AnchorPane id="libraryTabPane" fx:id="libraryTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <VBox id="libraryTabPaneBox" fx:id="libraryTabPaneBox" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                           <children>
+                              <TextArea promptText="dsfsdfsdfgsfgdsf" VBox.vgrow="ALWAYS" />
+                           </children></VBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab id="searchTab" fx:id="searchTab" closable="false" text="Suche">
+            <content>
+              <AnchorPane id="searchTabPane" fx:id="searchTabPane" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox id="searchTabPaneBox" fx:id="searchTabPaneBox" prefHeight="579.0" prefWidth="741.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                           <children>
+                              <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS">
+                                <items>
+                                  <AnchorPane id="leftPane" fx:id="leftPane" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox id="leftPaneBox" fx:id="leftPaneBox" prefHeight="350.0" prefWidth="277.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                                             <children>
+                                                <TextField id="searchText" fx:id="searchText" promptText="Suchbegriff..." />
+                                                <Button id="searchButton" fx:id="searchButton" mnemonicParsing="false" onAction="#fireSearch" text="Suchen" textAlignment="CENTER" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane id="rightPane" fx:id="rightPane" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox id="rightPaneBox" fx:id="rightPaneBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                                             <children>
+                                                <TableView id="searchResultTable" fx:id="searchResultTable" prefHeight="763.0" prefWidth="913.0">
+                                                  <columns>
+                                                    <TableColumn id="coverColumn" fx:id="coverColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Cover" />
+                                                    <TableColumn id="titleColumn" fx:id="titleColumn" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" text="Titel" />
+                                                      <TableColumn id="yearColumn" fx:id="yearColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Jahr" />
+                                                      <TableColumn id="actorsColumn" fx:id="actorsColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Schauspieler" />
+                                                      <TableColumn id="runtimeColumn" fx:id="runtimeColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Laufzeit" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </GridPane>
