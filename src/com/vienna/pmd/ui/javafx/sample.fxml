@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -11,6 +12,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -64,14 +66,24 @@
                      <children>
                         <VBox id="searchTabPaneBox" fx:id="searchTabPaneBox" prefHeight="579.0" prefWidth="741.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                            <children>
-                              <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS">
+                              <SplitPane dividerPositions="0.0" VBox.vgrow="ALWAYS">
                                 <items>
-                                  <AnchorPane id="leftPane" fx:id="leftPane" prefHeight="160.0" prefWidth="100.0">
+                                  <AnchorPane id="leftPane" fx:id="leftPane" maxWidth="340.0" minWidth="340.0" prefWidth="340.0">
                                        <children>
                                           <VBox id="leftPaneBox" fx:id="leftPaneBox" prefHeight="350.0" prefWidth="277.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                              <children>
                                                 <TextField id="searchText" fx:id="searchText" promptText="Suchbegriff..." />
-                                                <Button id="searchButton" fx:id="searchButton" mnemonicParsing="false" onAction="#fireSearch" text="Suchen" textAlignment="CENTER" />
+                                                <Button id="searchButton" fx:id="searchButton" mnemonicParsing="false" onAction="#fireSearch" text="Suchen" textAlignment="CENTER">
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="5.0" />
+                                                   </VBox.margin></Button>
+                                                <TableView id="searchResultTable" fx:id="searchResultTable" onMouseClicked="#searchResultTableClicked" prefHeight="763.0" prefWidth="913.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
+                                                  <columns>
+                                                    <TableColumn id="coverColumn" fx:id="coverColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Cover" />
+                                                    <TableColumn id="titleColumn" fx:id="titleColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Titel" />
+                                                      <TableColumn id="yearColumn" fx:id="yearColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Jahr" />
+                                                  </columns>
+                                                </TableView>
                                              </children>
                                           </VBox>
                                        </children>
@@ -80,17 +92,56 @@
                                        <children>
                                           <VBox id="rightPaneBox" fx:id="rightPaneBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                              <children>
-                                                <TableView id="searchResultTable" fx:id="searchResultTable" prefHeight="763.0" prefWidth="913.0">
-                                                  <columns>
-                                                    <TableColumn id="coverColumn" fx:id="coverColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Cover" />
-                                                    <TableColumn id="titleColumn" fx:id="titleColumn" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" text="Titel" />
-                                                      <TableColumn id="yearColumn" fx:id="yearColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Jahr" />
-                                                      <TableColumn id="actorsColumn" fx:id="actorsColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Schauspieler" />
-                                                      <TableColumn id="runtimeColumn" fx:id="runtimeColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Laufzeit" />
-                                                  </columns>
-                                                </TableView>
-                                             </children>
-                                          </VBox>
+                                                <GridPane VBox.vgrow="ALWAYS">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="NEVER" />
+                                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <GridPane GridPane.columnIndex="1" GridPane.rowSpan="2">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                      </GridPane>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Zu Bibliothek hinzufügen">
+                                                               <VBox.margin>
+                                                                  <Insets left="10.0" top="10.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" text="In Browser öffnen">
+                                                               <VBox.margin>
+                                                                  <Insets left="10.0" top="10.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox fillWidth="false" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+                                                         <children>
+                                                            <ImageView id="searchDetailImage" fx:id="searchDetailImage" fitHeight="600.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </VBox.margin>
+                                                            </ImageView>
+                                                         </children>
+                                                         <GridPane.margin>
+                                                            <Insets />
+                                                         </GridPane.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </GridPane>
+                                             </children></VBox>
                                        </children>
                                     </AnchorPane>
                                 </items>

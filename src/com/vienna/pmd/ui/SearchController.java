@@ -1,10 +1,8 @@
 package com.vienna.pmd.ui;
 
 import com.google.inject.Inject;
-import com.vienna.pmd.omdb.ISearchService;
-import com.vienna.pmd.omdb.ITitleSearchRequest;
-import com.vienna.pmd.omdb.ResponseType;
-import com.vienna.pmd.omdb.SearchException;
+import com.vienna.pmd.omdb.*;
+import com.vienna.pmd.omdb.impl.IDSearchRequest;
 import com.vienna.pmd.omdb.impl.SearchService;
 import com.vienna.pmd.omdb.impl.TitleSearchRequest;
 import com.vienna.pmd.omdb.xml.Result;
@@ -18,10 +16,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
+
+import java.util.Collections;
 
 public class SearchController {
 
@@ -42,12 +44,6 @@ public class SearchController {
 
     @FXML
     TableColumn yearColumn;
-
-    @FXML
-    TableColumn runtimeColumn;
-
-    @FXML
-    TableColumn actorsColumn;
 
     @FXML
     AnchorPane leftPane;
@@ -73,6 +69,9 @@ public class SearchController {
     @FXML
     VBox libraryTabPaneBox;
 
+    @FXML
+    ImageView searchDetailImage;
+
     ObservableList<Result> resultItems = null;
 
     @Inject
@@ -80,38 +79,22 @@ public class SearchController {
 
     @FXML
     public void initialize() {
-        /*
-        searchTabPaneBox.setMinSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-
-        // searchtab pane ausrichten
-        AnchorPane.setBottomAnchor(libraryTabPaneBox, 1.0d);
-        AnchorPane.setTopAnchor(libraryTabPaneBox, 1.0d);
-        AnchorPane.setLeftAnchor(libraryTabPaneBox, 1.0d);
-        AnchorPane.setRightAnchor(libraryTabPaneBox, 1.0d);
-
-        // searchtab pane ausrichten
-        AnchorPane.setBottomAnchor(searchTabPaneBox, 1.0d);
-        AnchorPane.setTopAnchor(searchTabPaneBox, 1.0d);
-        AnchorPane.setLeftAnchor(searchTabPaneBox, 1.0d);
-        AnchorPane.setRightAnchor(searchTabPaneBox, 1.0d);
-
-        // linken teil der splitpane ausrichten
-        AnchorPane.setBottomAnchor(leftPaneBox, 1.0d);
-        AnchorPane.setTopAnchor(leftPaneBox, 1.0d);
-        AnchorPane.setLeftAnchor(leftPaneBox, 1.0d);
-        AnchorPane.setRightAnchor(leftPaneBox, 1.0d);
-
-        // rechten teil der splitpane ausrichten
-        AnchorPane.setBottomAnchor(rightPaneBox, 1.0d);
-        AnchorPane.setTopAnchor(rightPaneBox, 1.0d);
-        AnchorPane.setLeftAnchor(rightPaneBox, 1.0d);
-        AnchorPane.setRightAnchor(rightPaneBox, 1.0d);
-*/
         // spalten für tabelle initialisieren
         yearColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("year"));
-        runtimeColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("runtime"));
-        actorsColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("actors"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("title"));
+        titleColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
+            @Override
+            public TableCell call(TableColumn param) {
+                TableCell<Result, String> cell = new TableCell<Result, String>();
+                Text text = new Text();
+                cell.setGraphic(text);
+                cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+                text.wrappingWidthProperty().bind(cell.widthProperty());
+                text.textProperty().bind(cell.itemProperty());
+                return cell;
+            }
+
+        });
         coverColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("poster"));
         coverColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
             @Override
@@ -124,6 +107,27 @@ public class SearchController {
         // observablelist for tabelleninhalt initialisieren
         resultItems = FXCollections.observableArrayList();
         searchResultTable.setItems(resultItems);
+    }
+
+    @FXML
+    private void searchResultTableClicked() {
+        Result selectedItem = searchResultTable.getSelectionModel().getSelectedItem();
+        String imdbId = selectedItem.getImdbID();
+
+        IIDSearchRequest request = new IDSearchRequest(imdbId, ResponseType.XML);
+
+        try {
+            Root response = searchService.search(request);
+            searchDetailImage.setImage(new Image(response.getMovies().get(0).getPoster()));
+        } catch(SearchException e) {
+            ExceptionDialog dialog = new ExceptionDialog(Alert.AlertType.ERROR);
+            dialog.setTitle("Fehler bei Suche");
+            dialog.setHeaderText("Fehler bei Suche");
+            dialog.setContentText("Bei der Suche ist ein Fehler aufgetreten. Bitte melden sie sich beim Administrator ;)");
+            dialog.setException(e);
+
+            dialog.showAndWait();
+        }
     }
 
     @FXML
