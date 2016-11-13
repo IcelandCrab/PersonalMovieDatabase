@@ -19,6 +19,7 @@ public interface ISearchService {
     public static final String ID_PARAMETER = "i";
     public static final String TITLE_PARAMETER = "s";
     public static final String RESPONSETYPE_PARAMETER = "r";
+    public static final String PLOT_PARAMETER = "plot";
 
     /**
      * Feuert eine Suche auf omdb.

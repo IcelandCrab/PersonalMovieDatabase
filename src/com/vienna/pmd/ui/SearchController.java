@@ -1,14 +1,22 @@
 package com.vienna.pmd.ui;
 
 import com.google.inject.Inject;
+import com.sun.javafx.property.PropertyReference;
 import com.vienna.pmd.omdb.*;
 import com.vienna.pmd.omdb.impl.IDSearchRequest;
 import com.vienna.pmd.omdb.impl.SearchService;
 import com.vienna.pmd.omdb.impl.TitleSearchRequest;
+import com.vienna.pmd.omdb.xml.Movie;
 import com.vienna.pmd.omdb.xml.Result;
 import com.vienna.pmd.omdb.xml.Root;
 import com.vienna.pmd.ui.javafx.ExceptionDialog;
 import com.vienna.pmd.ui.javafx.PosterCell;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.*;
+import javafx.beans.property.adapter.JavaBeanStringProperty;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +25,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -72,7 +82,37 @@ public class SearchController {
     @FXML
     ImageView searchDetailImage;
 
+    @FXML
+    Label actorsTextLabel;
+
+    @FXML
+    Label directorTextLabel;
+
+    @FXML
+    Label plotTextLabel;
+
+    @FXML
+    Label titleTextLabel;
+
+    @FXML
+    Label writerTextLabel;
+
+    @FXML
+    Label genreTextLabel;
+
+    @FXML
+    Label awardsTextLabel;
+
+    @FXML
+    Label votesTextLabel;
+
+    @FXML
+    Label ratingTextLabel;
+
+
     ObservableList<Result> resultItems = null;
+
+    ObjectProperty<Result> detailResultProperty = new SimpleObjectProperty<Result>();
 
     @Inject
     private ISearchService searchService;
@@ -107,6 +147,33 @@ public class SearchController {
         // observablelist for tabelleninhalt initialisieren
         resultItems = FXCollections.observableArrayList();
         searchResultTable.setItems(resultItems);
+
+        StringBinding actorsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getActors() : "", detailResultProperty);
+        actorsTextLabel.textProperty().bind(actorsBinding);
+
+        StringBinding titleBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getTitle() : "", detailResultProperty);
+        titleTextLabel.textProperty().bind(titleBinding);
+
+        StringBinding directorBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getDirector() : "", detailResultProperty);
+        directorTextLabel.textProperty().bind(directorBinding);
+
+        StringBinding writerBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getWriter() : "", detailResultProperty);
+        writerTextLabel.textProperty().bind(writerBinding);
+
+        StringBinding plotBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getPlot() : "", detailResultProperty);
+        plotTextLabel.textProperty().bind(plotBinding);
+
+        StringBinding genreBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getGenre() : "", detailResultProperty);
+        genreTextLabel.textProperty().bind(genreBinding);
+
+        StringBinding awardsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getAwards() : "", detailResultProperty);
+        awardsTextLabel.textProperty().bind(awardsBinding);
+
+        StringBinding ratingBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getImdbRating() : "", detailResultProperty);
+        ratingTextLabel.textProperty().bind(ratingBinding);
+
+        StringBinding votesBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getImdbVotes() : "", detailResultProperty);
+        votesTextLabel.textProperty().bind(votesBinding);
     }
 
     @FXML
@@ -118,7 +185,10 @@ public class SearchController {
 
         try {
             Root response = searchService.search(request);
-            searchDetailImage.setImage(new Image(response.getMovies().get(0).getPoster()));
+            if(response.getMovies().size() > 0) {
+                searchDetailImage.setImage(new Image(response.getMovies().get(0).getPoster()));
+                setDetailResult(response.getMovies().get(0));
+            }
         } catch(SearchException e) {
             ExceptionDialog dialog = new ExceptionDialog(Alert.AlertType.ERROR);
             dialog.setTitle("Fehler bei Suche");
@@ -132,6 +202,17 @@ public class SearchController {
 
     @FXML
     private void fireSearch(ActionEvent event) {
+        search();
+    }
+
+    @FXML
+    private void searchTextKeyPressed(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER) {
+            search();
+        }
+    }
+
+    private void search() {
         ITitleSearchRequest request = new TitleSearchRequest(searchText.getText(), null, null, ResponseType.XML);
         try {
             Root response = searchService.search(request);
@@ -147,5 +228,17 @@ public class SearchController {
 
             dialog.showAndWait();
         }
+    }
+
+    public Result getDetailResult() {
+        return detailResultProperty.get();
+    }
+
+    public void setDetailResult(Result detailResult) {
+        detailResultProperty.set(detailResult);
+    }
+
+    public ObjectProperty<Result> getDetailResultProperty() {
+        return detailResultProperty;
     }
 }

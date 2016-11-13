@@ -69,6 +69,7 @@ public class SearchService implements ISearchService {
             .setHost(SEARCH_URL)
             .setPath(SEARCH_PATH)
             .setParameter(ID_PARAMETER, request.getImdbId())
+            .setParameter(PLOT_PARAMETER, PlotType.LONG.getEncodedName())
             .setParameter(RESPONSETYPE_PARAMETER, request.getResponseType() != null ? request.getResponseType().name() : ResponseType.XML.name());
 
         return uriBuilder;

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -68,11 +69,11 @@
                            <children>
                               <SplitPane dividerPositions="0.0" VBox.vgrow="ALWAYS">
                                 <items>
-                                  <AnchorPane id="leftPane" fx:id="leftPane" maxWidth="340.0" minWidth="340.0" prefWidth="340.0">
+                                  <AnchorPane id="leftPane" fx:id="leftPane" maxWidth="347.0" minWidth="347.0" prefWidth="347.0">
                                        <children>
                                           <VBox id="leftPaneBox" fx:id="leftPaneBox" prefHeight="350.0" prefWidth="277.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                              <children>
-                                                <TextField id="searchText" fx:id="searchText" promptText="Suchbegriff..." />
+                                                <TextField id="searchText" fx:id="searchText" onKeyPressed="#searchTextKeyPressed" promptText="Suchbegriff..." />
                                                 <Button id="searchButton" fx:id="searchButton" mnemonicParsing="false" onAction="#fireSearch" text="Suchen" textAlignment="CENTER">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="5.0" />
@@ -98,22 +99,127 @@
                                                     <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                                                   </columnConstraints>
                                                   <rowConstraints>
-                                                    <RowConstraints vgrow="SOMETIMES" />
+                                                    <RowConstraints vgrow="NEVER" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                                                   </rowConstraints>
                                                    <children>
                                                       <GridPane GridPane.columnIndex="1" GridPane.rowSpan="2">
                                                         <columnConstraints>
-                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                          <ColumnConstraints hgrow="NEVER" />
                                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                         </columnConstraints>
                                                         <rowConstraints>
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         </rowConstraints>
+                                                         <children>
+                                                            <Label text="Titel">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin></Label>
+                                                            <Label text="Regisseur" GridPane.rowIndex="1">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Schauspieler" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Autor" GridPane.rowIndex="2">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Inhalt" GridPane.rowIndex="9">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Genre" GridPane.rowIndex="5">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Wertung" GridPane.rowIndex="6">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Stimmen" GridPane.rowIndex="7">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label text="Preise" GridPane.rowIndex="8">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="18.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="actorsTextLabel" fx:id="actorsTextLabel" text="SchauspielerText" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.valignment="TOP">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" top="12.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="titleTextLabel" fx:id="titleTextLabel" text="TitelText" GridPane.columnIndex="1">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="directorTextLabel" fx:id="directorTextLabel" text="RegisseurText" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="writerTextLabel" fx:id="writerTextLabel" text="AutorText" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="genreTextLabel" fx:id="genreTextLabel" text="GenreText" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="ratingTextLabel" fx:id="ratingTextLabel" text="WertungText" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="votesTextLabel" fx:id="votesTextLabel" text="StimmenText" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="awardsTextLabel" fx:id="awardsTextLabel" text="PreiseText" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                            <Label id="plotTextLabel" fx:id="plotTextLabel" text="InhaltsText" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="2147483647" GridPane.valignment="TOP">
+                                                               <GridPane.margin>
+                                                                  <Insets left="8.0" right="8.0" top="11.0" />
+                                                               </GridPane.margin>
+                                                            </Label>
+                                                         </children>
                                                       </GridPane>
-                                                      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
                                                          <children>
                                                             <Button mnemonicParsing="false" text="Zu Bibliothek hinzufügen">
                                                                <VBox.margin>
@@ -127,9 +233,9 @@
                                                             </Button>
                                                          </children>
                                                       </VBox>
-                                                      <VBox fillWidth="false" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+                                                      <VBox fillWidth="false" maxHeight="450.0" maxWidth="310.0" minHeight="450.0" minWidth="310.0" prefHeight="450.0" prefWidth="310.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                                          <children>
-                                                            <ImageView id="searchDetailImage" fx:id="searchDetailImage" fitHeight="600.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView id="searchDetailImage" fx:id="searchDetailImage" fitHeight="440.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                                                                <VBox.margin>
                                                                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                                </VBox.margin>
