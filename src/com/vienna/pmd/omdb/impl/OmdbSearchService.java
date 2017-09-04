@@ -20,11 +20,20 @@ import java.net.URISyntaxException;
 /**
  * Created by bobmo on 23.10.2016.
  */
-public class SearchService implements ISearchService {
+public class OmdbSearchService implements ISearchService<Root> {
+
+    private static final String SEARCH_SCHEME = "http";
+    private static final String SEARCH_URL = "www.omdbapi.com";
+    private static final String SEARCH_PATH = "/";
+
+    private static final String ID_PARAMETER = "i";
+    private static final String TITLE_PARAMETER = "s";
+    private static final String RESPONSETYPE_PARAMETER = "r";
+    private static final String PLOT_PARAMETER = "plot";
 
     private CloseableHttpClient client = null;
 
-    public SearchService() {
+    public OmdbSearchService() {
         client = HttpClients.createDefault();
     }
 
@@ -40,6 +49,31 @@ public class SearchService implements ISearchService {
             throw new SearchException("Unbekannter Suchtyp '" + request.getClass().getName() + "', Suche kann nicht durchgeführt werden!");
 
         return sendSearch(uriBuilder);
+    }
+
+    @Override
+    public String getSearchScheme() {
+        return SEARCH_SCHEME;
+    }
+
+    @Override
+    public String getSearchUrl() {
+        return SEARCH_URL;
+    }
+
+    @Override
+    public String getSearchPath() {
+        return SEARCH_PATH;
+    }
+
+    @Override
+    public String getIdParameter() {
+        return ID_PARAMETER;
+    }
+
+    @Override
+    public String getTitleParameter() {
+        return TITLE_PARAMETER;
     }
 
     private Root sendSearch(URIBuilder uriBuilder) throws SearchException {

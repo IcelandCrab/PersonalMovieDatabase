@@ -1,7 +1,8 @@
 package com.vienna.pmd.omdb;
 
 import com.google.inject.ImplementedBy;
-import com.vienna.pmd.omdb.impl.SearchService;
+import com.vienna.pmd.omdb.impl.ApiSearchRequest;
+import com.vienna.pmd.omdb.impl.OmdbSearchService;
 import com.vienna.pmd.omdb.xml.Root;
 
 /**
@@ -9,17 +10,8 @@ import com.vienna.pmd.omdb.xml.Root;
  *
  * Created by bobmo on 23.10.2016.
  */
-@ImplementedBy(SearchService.class)
-public interface ISearchService {
-
-    public static final String SEARCH_SCHEME = "http";
-    public static final String SEARCH_URL = "www.omdbapi.com";
-    public static final String SEARCH_PATH = "/";
-
-    public static final String ID_PARAMETER = "i";
-    public static final String TITLE_PARAMETER = "s";
-    public static final String RESPONSETYPE_PARAMETER = "r";
-    public static final String PLOT_PARAMETER = "plot";
+@ImplementedBy(ApiSearchRequest.class)
+public interface ISearchService<T> {
 
     /**
      * Feuert eine Suche auf omdb.
@@ -28,5 +20,12 @@ public interface ISearchService {
      * @param request
      * @return
      */
-    public Root search(ISearchRequest request) throws SearchException;
+    public T search(ISearchRequest request) throws SearchException;
+
+    public String getSearchScheme();
+    public String getSearchUrl();
+    public String getSearchPath();
+
+    public String getIdParameter();
+    public String getTitleParameter();
 }

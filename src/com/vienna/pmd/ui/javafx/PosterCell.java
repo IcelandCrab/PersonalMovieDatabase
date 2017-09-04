@@ -1,5 +1,7 @@
 package com.vienna.pmd.ui.javafx;
 
+import com.vienna.pmd.omdb.json.Movie;
+import com.vienna.pmd.omdb.json.Poster;
 import com.vienna.pmd.omdb.xml.Result;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
@@ -10,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * Created by bobmo on 30.10.2016.
  */
-public class PosterCell extends TableCell<Result, String> {
+public class PosterCell extends TableCell<Movie, Poster> {
     VBox box;
     ImageView imageView;
 
@@ -25,8 +27,8 @@ public class PosterCell extends TableCell<Result, String> {
     }
 
     @Override
-    protected void updateItem(String item, boolean empty) {
-        if(item != null && !item.isEmpty())
-            imageView.setImage(new Image(item, true));
+    protected void updateItem(Poster item, boolean empty) {
+        if(item != null && item.getThumb() != null)
+            imageView.setImage(new Image(item.getThumb(), true));
     }
 }

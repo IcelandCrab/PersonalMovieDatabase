@@ -1,12 +1,12 @@
 package com.vienna.pmd.ui;
 
 import com.google.inject.Inject;
-import com.sun.javafx.property.PropertyReference;
 import com.vienna.pmd.omdb.*;
 import com.vienna.pmd.omdb.impl.IDSearchRequest;
-import com.vienna.pmd.omdb.impl.SearchService;
 import com.vienna.pmd.omdb.impl.TitleSearchRequest;
-import com.vienna.pmd.omdb.xml.Movie;
+import com.vienna.pmd.omdb.json.Movie;
+import com.vienna.pmd.omdb.json.Movies;
+import com.vienna.pmd.omdb.json.Poster;
 import com.vienna.pmd.omdb.xml.Result;
 import com.vienna.pmd.omdb.xml.Root;
 import com.vienna.pmd.ui.javafx.ExceptionDialog;
@@ -14,9 +14,6 @@ import com.vienna.pmd.ui.javafx.PosterCell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanStringProperty;
-import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,12 +25,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class SearchController {
 
@@ -44,7 +42,7 @@ public class SearchController {
     TextField searchText;
 
     @FXML
-    TableView<Result> searchResultTable;
+    TableView<Movie> searchResultTable;
 
     @FXML
     TableColumn coverColumn;
@@ -110,9 +108,9 @@ public class SearchController {
     Label ratingTextLabel;
 
 
-    ObservableList<Result> resultItems = null;
+    private ObservableList<Movie> resultItems = null;
 
-    ObjectProperty<Result> detailResultProperty = new SimpleObjectProperty<Result>();
+    private ObjectProperty<Movie> detailResultProperty = new SimpleObjectProperty<Movie>();
 
     @Inject
     private ISearchService searchService;
@@ -120,12 +118,12 @@ public class SearchController {
     @FXML
     public void initialize() {
         // spalten für tabelle initialisieren
-        yearColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("year"));
-        titleColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("title"));
+        yearColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("year"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("title"));
         titleColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
             @Override
             public TableCell call(TableColumn param) {
-                TableCell<Result, String> cell = new TableCell<Result, String>();
+                TableCell<Movie, String> cell = new TableCell<Movie, String>();
                 Text text = new Text();
                 cell.setGraphic(text);
                 cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
@@ -135,11 +133,11 @@ public class SearchController {
             }
 
         });
-        coverColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("poster"));
+        coverColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("poster"));
         coverColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
             @Override
             public TableCell call(TableColumn param) {
-                TableCell<Result, String> cell = new PosterCell();
+                TableCell<Movie, Poster> cell = new PosterCell();
                 return cell;
             }
         });
@@ -148,7 +146,8 @@ public class SearchController {
         resultItems = FXCollections.observableArrayList();
         searchResultTable.setItems(resultItems);
 
-        StringBinding actorsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getActors() : "", detailResultProperty);
+        StringBinding actorsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ?
+                Arrays.stream(detailResultProperty.get().getCast()).map((cast) -> cast.getName()).collect(Collectors.joining(",")) : "", detailResultProperty);
         actorsTextLabel.textProperty().bind(actorsBinding);
 
         StringBinding titleBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getTitle() : "", detailResultProperty);
@@ -157,37 +156,40 @@ public class SearchController {
         StringBinding directorBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getDirector() : "", detailResultProperty);
         directorTextLabel.textProperty().bind(directorBinding);
 
-        StringBinding writerBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getWriter() : "", detailResultProperty);
+        StringBinding writerBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ?
+                Arrays.stream(detailResultProperty.get().getWriters()).collect(Collectors.joining(",")) : "", detailResultProperty);
         writerTextLabel.textProperty().bind(writerBinding);
 
-        StringBinding plotBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getPlot() : "", detailResultProperty);
+        StringBinding plotBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getDescription() : "", detailResultProperty);
         plotTextLabel.textProperty().bind(plotBinding);
 
-        StringBinding genreBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getGenre() : "", detailResultProperty);
+        StringBinding genreBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ?
+                Arrays.stream(detailResultProperty.get().getGenre()).collect(Collectors.joining(",")) : "", detailResultProperty);
         genreTextLabel.textProperty().bind(genreBinding);
 
-        StringBinding awardsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getAwards() : "", detailResultProperty);
+        StringBinding awardsBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? "" : "", detailResultProperty);
         awardsTextLabel.textProperty().bind(awardsBinding);
 
-        StringBinding ratingBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getImdbRating() : "", detailResultProperty);
+        StringBinding ratingBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getRating() : "", detailResultProperty);
         ratingTextLabel.textProperty().bind(ratingBinding);
 
-        StringBinding votesBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getImdbVotes() : "", detailResultProperty);
+        StringBinding votesBinding = Bindings.createStringBinding(() -> detailResultProperty.get() != null ? detailResultProperty.get().getRating_count() : "", detailResultProperty);
         votesTextLabel.textProperty().bind(votesBinding);
     }
 
     @FXML
     private void searchResultTableClicked() {
-        Result selectedItem = searchResultTable.getSelectionModel().getSelectedItem();
-        String imdbId = selectedItem.getImdbID();
+        Movie selectedItem = searchResultTable.getSelectionModel().getSelectedItem();
+        String imdbId = selectedItem.getImdb_id();
 
-        IIDSearchRequest request = new IDSearchRequest(imdbId, ResponseType.XML);
+        IIDSearchRequest request = new IDSearchRequest(imdbId, ResponseType.JSON);
 
         try {
-            Root response = searchService.search(request);
-            if(response.getMovies().size() > 0) {
-                searchDetailImage.setImage(new Image(response.getMovies().get(0).getPoster()));
-                setDetailResult(response.getMovies().get(0));
+            Movies response = (Movies) searchService.search(request);
+            Optional<Movie> movie = response.getMovies().stream().findFirst();
+            if(movie.isPresent() && movie.get().getPoster() != null && movie.get().getPoster().getThumb() != null) {
+                searchDetailImage.setImage(new Image(movie.get().getPoster().getThumb()));
+                setDetailResult(movie.get());
             }
         } catch(SearchException e) {
             ExceptionDialog dialog = new ExceptionDialog(Alert.AlertType.ERROR);
@@ -215,10 +217,10 @@ public class SearchController {
     private void search() {
         ITitleSearchRequest request = new TitleSearchRequest(searchText.getText(), null, null, ResponseType.XML);
         try {
-            Root response = searchService.search(request);
+            Movies response = (Movies) searchService.search(request);
 
             resultItems.clear();
-            resultItems.addAll(response.getResults());
+            resultItems.addAll(response.getMovies());
         } catch(SearchException e) {
             ExceptionDialog dialog = new ExceptionDialog(Alert.AlertType.ERROR);
             dialog.setTitle("Fehler bei Suche");
@@ -230,15 +232,15 @@ public class SearchController {
         }
     }
 
-    public Result getDetailResult() {
+    public Movie getDetailResult() {
         return detailResultProperty.get();
     }
 
-    public void setDetailResult(Result detailResult) {
+    public void setDetailResult(Movie detailResult) {
         detailResultProperty.set(detailResult);
     }
 
-    public ObjectProperty<Result> getDetailResultProperty() {
+    public ObjectProperty<Movie> getDetailResultProperty() {
         return detailResultProperty;
     }
 }

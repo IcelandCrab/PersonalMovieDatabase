@@ -12,4 +12,6 @@ public interface ISearchRequest {
      * @return den spezifizierten Formattyp (z.B. XML)
      */
     public ResponseType getResponseType();
+
+    public SearchType getSearchType();
 }
