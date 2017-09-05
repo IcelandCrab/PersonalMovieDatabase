@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.thoughtworks.xstream.XStream;
-import com.vienna.pmd.omdb.xml.Result;
-import com.vienna.pmd.omdb.xml.Root;
+import com.vienna.pmd.entity.tables.Test;
+import com.vienna.pmd.entity.tables.records.TestRecord;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +20,12 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jooq.DSLContext;
+import org.jooq.Record2;
+import org.jooq.Result;
+import org.jooq.impl.DSL;
+
+import java.sql.*;
 
 public class Main extends Application {
 
@@ -41,35 +47,39 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        try {
-            /*
-            CloseableHttpClient client = HttpClients.createDefault();
-            URIBuilder uriBuilder = new URIBuilder().setScheme("http")
-                    .setHost("www.omdbapi.com")
-                    .setPath("/")
-                    .setParameter("i", "tt0093773")
-                    //.setParameter("s", "House of Cards")
-                    .setParameter("r", "XML");
+            Connection connection = null;
+            try
+            {
+                // create a database connection
+                connection = DriverManager.getConnection("jdbc:sqlite:C:/Users/bobmo/Documents/PMDTest1.db");
 
-            HttpGet get = new HttpGet(uriBuilder.build());
+                DSLContext context = DSL.using(connection);
+                TestRecord fetch = context.selectFrom(Test.TEST)
+                        .where(Test.TEST.ID.eq(1))
+                        .fetchAny();
 
-            System.out.println(get.getURI());
-
-            CloseableHttpResponse response = client.execute(get);
-
-            HttpEntity entity = response.getEntity();
-
-            System.out.println(EntityUtils.toString(entity));
-
-            /*
-            XStream stream = new XStream();
-            stream.processAnnotations(new Class[] {Result.class, Root.class});
-            Root root = (Root) stream.fromXML(entity.getContent());
-            System.out.println("found total results: " + root.getResults());
-*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                System.out.println(fetch.getId());
+                System.out.println(fetch.getYeah());
+            }
+            catch(SQLException e)
+            {
+                // if the error message is "out of memory",
+                // it probably means no database file is found
+                System.out.println(e.getMessage());
+            }
+            finally
+            {
+                try
+                {
+                    if(connection != null)
+                        connection.close();
+                }
+                catch(SQLException e)
+                {
+                    // connection close failed.
+                    System.out.println(e);
+                }
+            }
 
         launch(args);
     }
